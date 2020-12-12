@@ -119,7 +119,7 @@ class _PokedexScreenState extends State<PokedexScreen> with SingleTickerProvider
         bottom: context.responsive(4),
       ),
       child: Text(
-        'Pokedex',
+        'PokeWiki',
         style: TextStyle(
           fontSize: 30,
           fontWeight: FontWeight.bold,

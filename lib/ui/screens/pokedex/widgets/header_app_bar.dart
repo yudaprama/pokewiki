@@ -28,7 +28,7 @@ class _HeaderAppBar extends StatelessWidget {
             ),
           ),
           Text(
-            'Pokedex',
+            'PokeWiki',
             key: appBarKey,
             style: TextStyle(
               color: Colors.transparent,

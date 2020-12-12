@@ -17,7 +17,7 @@ class _HeaderAppBar extends StatelessWidget {
     }
 
     return Text(
-      'Pokedex',
+      'PokeWiki',
       style: TextStyle(
         fontWeight: FontWeight.bold,
       ),

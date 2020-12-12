@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
               fit: BoxFit.contain,
             ),
             Text(
-              'Pokedex',
+              'PokeWiki',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
