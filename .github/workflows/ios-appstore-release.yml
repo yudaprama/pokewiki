@@ -1,0 +1,61 @@
+name: iOS Prod Release
+on:
+  push:
+    branches: [ yudaprama ]
+jobs:
+  build:
+    name: Build IPA and Create release
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v1
+      - name: Fetch all history for all tags and branches
+        run: |
+          git config remote.origin.url https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
+          git fetch --prune --depth=10000
+      - uses: Apple-Actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATES_FILE_BASE64 }}
+          p12-password: ${{ secrets.CERTIFICATES_PASSWORD }}
+      - uses: Apple-Actions/download-provisioning-profiles@v1
+        name: "Download IOS_APP_STORE provisioning"
+        with:
+          bundle-id: com.yudapramadjunaedi.beasiswa
+          profile-type: 'IOS_APP_STORE'
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+      - uses: Apple-Actions/download-provisioning-profiles@v1
+        name: "Download IOS_APP_DEVELOPMENT provisioning"
+        with:
+          bundle-id: com.yudapramadjunaedi.beasiswa
+          profile-type: 'IOS_APP_DEVELOPMENT'
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.22.4'
+      - run: flutter build ios --release
+      - run: ls "/Users/runner/Library/MobileDevice/Provisioning Profiles/"
+      - name: Compress Runner.app to Payload.zip
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/ios/iphoneos/Runner.app
+          dest: build/ios/iphoneos/Payload.zip
+      - name: Rename Payload.zip to Payload.ipa
+        run: mv build/ios/iphoneos/Payload.zip build/ios/iphoneos/Payload.ipa
+      - run: ls -la
+      - name: Create a Release in GitHub
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/ios/iphoneos/Payload.ipa"
+          token: ${{ secrets.GH_TOKEN }}
+          tag: "1.0.0+1"
+          commit: ${{ github.sha }}
+      - name: Release app to testflight
+        uses: Apple-Actions/upload-testflight-build@master
+        with:
+          app-path: build/ios/iphoneos/Payload.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
