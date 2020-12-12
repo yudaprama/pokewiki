@@ -21,7 +21,7 @@ jobs:
         with:
           artifacts: "build/app/outputs/bundle/release/app-release.aab"
           token: ${{ secrets.GH_TOKEN }}
-          tag: "1.0.0+1"
+          tag: "1.0.0+2"
           commit: ${{ github.sha }}
       - name: Upload app bundle to artifact
         uses: actions/upload-artifact@v2
