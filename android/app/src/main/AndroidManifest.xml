@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="Pokedex"
+        android:label="PokeWiki"
         android:icon="@mipmap/ic_launcher"
         android:hardwareAccelerated="true">
         <activity
