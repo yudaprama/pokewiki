@@ -16,6 +16,8 @@ jobs:
           flutter-version: '1.22.3'
       - run: flutter pub get
       - run: flutter build appbundle
+      - run: flutter build apk --debug
+      - run: flutter build apk --profile
       - run: flutter build apk --release
       - name: Create a Release in GitHub
         uses: ncipollo/release-action@v1
